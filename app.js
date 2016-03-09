@@ -189,13 +189,34 @@
 
        //console.log(title + ' ' + ingredients);
        //1) tekitan uue Jar'i
-       var new_jar = new Jar(guid(), title, ingredients);
+	   var id = guid();
+       var new_jar = new Jar(id, title, ingredients);
 
        //lisan massiiivi purgi
        this.jars.push(new_jar);
        console.log(JSON.stringify(this.jars));
        // JSON'i stringina salvestan localStorage'isse
        localStorage.setItem('jars', JSON.stringify(this.jars));
+	   
+		
+		//AJAX
+		var xhttp = new XMLHttpRequest();
+		
+		//mis juhtub kui päring lõppeb
+		xhttp.onreadystatechange = function() {
+			
+			console.log(xhttp.readyState);
+			
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				
+				console.log(xhttp.responseText);
+			}
+		};
+		
+		//teeb päringu
+		xhttp.open("GET", "save.php?id="+id+"&title="+title+"&ingredients="+ingredients, true);
+		xhttp.send();
+	   
 
        // 2) lisan selle htmli listi juurde
        var li = new_jar.createHtmlElement();
