@@ -89,7 +89,39 @@
 
            });
 
-       }
+       }else{
+		   
+		   //küsin AJAXIGA
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					
+					console.log(xhttp.responseText);
+					//tekst -> objekktideks
+					Moosipurk.instance.jars = JSON.parse(xhttp.responseText);
+					console.log(Moosipurk.instance.jars);
+					
+					//teen purgid htmli
+					Moosipurk.instance.jars.forEach(function(jar){
+
+					   var new_jar = new Jar(jar.id, jar.title, jar.ingredients);
+
+					   var li = new_jar.createHtmlElement();
+					   document.querySelector('.list-of-jars').appendChild(li);
+
+				   });
+				   
+				   //salvestan localStoragisse
+				   localStorage.setItem('jars', JSON.stringify(Moosipurk.instance.jars));
+				   
+					
+				}
+			};
+			xhttp.open("GET", "save.php", true);
+			xhttp.send();
+			
+			
+	   }
 
 
        // esimene loogika oleks see, et kuulame hiireklikki nupul
